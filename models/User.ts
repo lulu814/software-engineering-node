@@ -5,7 +5,7 @@ import Location from "./Location";
 export default class User {
     private username: string = '';
     private password: string = '';
-    private firstName: string | null
+    private firstName: string | null = null;
     private lastName: string | null = null;
     private email: string = '';
     private profilePhoto: string | null = null;
