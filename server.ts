@@ -8,7 +8,7 @@ import TuitDao from './daos/TuitDao';
 const app = express();
 app.use(express.json());
 const userDao = new UserDao();
-// mongoose.connect('mongodb://localhost:27017/tuit-db');
+mongoose.connect('mongodb://localhost:27017/tuit-db');
 let userController: UserController;
 userController = new UserController(app, userDao);
 let tuitController: TuitController;
