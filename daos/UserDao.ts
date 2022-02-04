@@ -1,21 +1,32 @@
-import User from "../models/User";
-import UserModel from "../mongoose/UserModel";
-import UserDaoI from "../interfaces/UserDao";
+import User from "../models/users/User";
+import UserModel from "../mongoose/users/UserModel";
+import UserDaoI from "../interfaces/UserDaoI";
 
+/**
+ * Implements Data Access Object managing data storage
+ * of Users
+ * @implements {UserDaoI} UserDaoI
+ * @property {UserDao} userDao Private single instance of UserDaoI
+ */
 export default class UserDao implements UserDaoI {
-    async findAllUsers(): Promise<User[]> {
-        return UserModel.find();
+    private static userDao: UserDao | null = null;
+    public static getInstance = (): UserDao => {
+        if(UserDao.userDao === null) {
+            UserDao.userDao = new UserDao();
+        }
+        return UserDao.userDao;
     }
-    async findUserById(uid: string): Promise<User> {
-        return UserModel.findById(uid);
-    }
-    async createUser(user: User): Promise<void> {
-        return await UserModel.create(user);
-    }
-    async deleteUser(uid: string):  Promise<any> {
-        return UserModel.deleteOne({_id: uid});
-    }
-    async updateUser(uid: string, user: User): Promise<any> {
-        return UserModel.updateOne({_id: uid}, {$set: user});
-    }
-}
+    private constructor() {}
+    findAllUsers = async (): Promise<User[]> =>
+        UserModel.find().exec();
+    findUserById = async (uid: string): Promise<any> =>
+        UserModel.findById(uid);
+    createUser = async (user: User): Promise<User> =>
+        UserModel.create(user);
+    updateUser = async (uid: string, user: User): Promise<any> =>
+        UserModel.updateOne(
+            {_id: uid},
+            {$set: user});
+    deleteUser = async (uid: string): Promise<any> =>
+        UserModel.deleteOne({_id: uid});
+};

@@ -1,21 +1,22 @@
+/**
+ * @file Server file
+ */
+
 import express from 'express';
 import mongoose from 'mongoose';
+// mongoose.connect('mongodb://localhost:27017/tuit-db');
+mongoose.connect('mongodb+srv://lilaliu:CS5500lila@cluster0.i1c3p.mongodb.net/tuit-db?retryWrites=true&w=majority');
+import bodyParser from "body-parser";
 import UserController from './controllers/UserController';
-import UserDao from "./daos/UserDao";
 import TuitController from "./controllers/TuitController";
-import TuitDao from './daos/TuitDao';
+import LikeController from "./controllers/LikeController";
 
 const app = express();
 app.use(express.json());
-const userDao = new UserDao();
-mongoose.connect('mongodb://localhost:27017/tuit-db');
-let userController: UserController;
-userController = new UserController(app, userDao);
-let tuitController: TuitController;
-tuitController = new TuitController(app, new TuitDao());
 
-app.get('/hello', (req, res) =>
-    res.send('Hello World!'));
+const userController = UserController.getInstance(app);
+const tuitController = TuitController.getInstance(app);
+const likesController = LikeController.getInstance(app);
 
 const PORT = 4000;
 app.listen(process.env.PORT || PORT);

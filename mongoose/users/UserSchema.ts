@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import Location from "../models/Location";
+import LocationSchema from "./LocationSchema";
 const UserSchema = new mongoose.Schema({
     username: {type: String, required: true},
     password: {type: String, required: true},
@@ -13,7 +13,7 @@ const UserSchema = new mongoose.Schema({
     biography: String,
     dateOfBirth: Date,
     joined: {type: Date, default: Date.now},
-    location: [Number],   // schema type fixed
+    location: {type: LocationSchema}, // or just use location: {latitude: Number, longitude: Number}
 }, {collection: 'users'});
 export default UserSchema;
 

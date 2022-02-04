@@ -1,29 +1,28 @@
-import Tuit from "../models/Tuit";
-import TuitModel from "../mongoose/TuitModel";
-import TuitDaoI from "../interfaces/TuitDao";
+import Tuit from "../models/tuits/Tuit";
+import TuitModel from "../mongoose/tuits/TuitModel";
+import TuitDaoI from "../interfaces/TuitDaoI";
 
 export default class TuitDao implements TuitDaoI {
-    async findAllTuits(): Promise<Tuit[]> {
-        return TuitModel.find();
+    private static tuitDao: TuitDao | null = null;
+    public static getInstance = (): TuitDao => {
+        if(TuitDao.tuitDao === null) {
+            TuitDao.tuitDao = new TuitDao();
+        }
+        return TuitDao.tuitDao;
     }
-
-    async findTuitsById(tid: string): Promise<Tuit> {
-        return TuitModel.findById(tid);
-    }
-
-    async findTuitsByUser(uid: string): Promise<Tuit[]> {
-        return TuitModel.find({postedBy: uid})
-    }
-
-    async createTuits(tuit: Tuit): Promise<void> {
-        return TuitModel.create(tuit);
-    }
-
-    async deleteTuits(tid: string): Promise<any> {
-        return TuitModel.deleteOne({_id: tid});
-    }
-
-    async updateTuits(tid: string, tuit: Tuit): Promise<any> {
-        return TuitModel.updateOne({_id: tid}, {$set: tuit});
-    }
+    private constructor() {}
+    findAllTuits = async (): Promise<Tuit[]> =>
+        TuitModel.find();
+    findAllTuitsByUser = async (uid: string): Promise<Tuit[]> =>
+        TuitModel.find({postedBy: uid});
+    findTuitById = async (tid: string): Promise<any> =>
+        TuitModel.findById(tid);
+    createTuit = async (tuit: Tuit): Promise<Tuit> =>
+        TuitModel.create(tuit);
+    updateTuit = async (uid: string, tuit: Tuit): Promise<any> =>
+        TuitModel.updateOne(
+            {_id: uid},
+            {$set: tuit});
+    deleteTuit = async (uid: string): Promise<any> =>
+        TuitModel.deleteOne({_id: uid});
 }
