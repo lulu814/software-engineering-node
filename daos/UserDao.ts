@@ -6,7 +6,7 @@ import UserDaoI from "../interfaces/UserDaoI";
  * Implements Data Access Object managing data storage
  * of Users
  * @implements {UserDaoI} UserDaoI
- * @property {UserDao} userDao Private single instance of UserDaoI
+ * @property {UserDao} userDao Private single instance of UserDao
  */
 export default class UserDao implements UserDaoI {
     private static userDao: UserDao | null = null;
@@ -29,4 +29,6 @@ export default class UserDao implements UserDaoI {
             {$set: user});
     deleteUser = async (uid: string): Promise<any> =>
         UserModel.deleteOne({_id: uid});
+    deleteAllUsers = async (): Promise<any> =>
+        UserModel.deleteMany({});
 };
