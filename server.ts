@@ -12,7 +12,7 @@ import TuitController from "./controllers/TuitController";
 import LikeController from "./controllers/LikeController";
 
 const app = express();
-app.use(express.json());
+app.use(bodyParser.json())
 
 const userController = UserController.getInstance(app);
 const tuitController = TuitController.getInstance(app);
