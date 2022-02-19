@@ -1,5 +1,25 @@
+/**
+ * @file Implements mongoose schema for users
+ */
+
 import mongoose from "mongoose";
-import LocationSchema from "./LocationSchema";
+
+/**
+ * @typedef User Represents the tuit user
+ * @property {string} username The user's username, required field
+ * @property {string} username The user's password, required field
+ * @property {string} firstName The user's firstname
+ * @property {string} lastName The user's lasrname
+ * @property {string} email The user's email, required field
+ * @property {string} profilePhoto The user's profile photo
+ * @property {string} headerImage The user's header image
+ * @property {string} accountType The user's account type, default is personal
+ * @property {string} maritalStatus The user's marital status, default is single
+ * @property {string} biography The user's biography
+ * @property {Date} dateOfBirth The user's birthday
+ * @property {Date} joined The user's join date, default to current time
+ * @property {Number[]} location Latitude and Longitude of the location
+ */
 const UserSchema = new mongoose.Schema({
     username: {type: String, required: true, default: `testusername${Date.now()}`},
     password: {type: String, required: true, default: `testpassword${Date.now()}`},
@@ -13,7 +33,10 @@ const UserSchema = new mongoose.Schema({
     biography: String,
     dateOfBirth: Date,
     joined: {type: Date, default: Date.now},
-    location: {type: LocationSchema}, // or just use location: {latitude: Number, longitude: Number}
+    location: {
+        latitude: Number,
+        longitude: Number
+    },
 }, {collection: 'users'});
 export default UserSchema;
 
