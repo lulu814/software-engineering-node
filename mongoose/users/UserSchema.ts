@@ -16,9 +16,9 @@ import mongoose from "mongoose";
  * @property {string} accountType The user's account type, default is personal
  * @property {string} maritalStatus The user's marital status, default is single
  * @property {string} biography The user's biography
- * @property {Date} dateOfBirth The user's birthday
- * @property {Date} joined The user's join date, default to current time
- * @property {Number[]} location Latitude and Longitude of the location
+ * @property {date} dateOfBirth The user's birthday
+ * @property {date} joined The user's join date, default to current time
+ * @property {number[]} location Latitude and Longitude of the location
  */
 const UserSchema = new mongoose.Schema({
     username: {type: String, required: true, default: `testusername${Date.now()}`},

@@ -15,7 +15,7 @@ import LikeControllerI from "../interfaces/LikeControllerI";
  *     </li>
  *     <li>POST /api/users/:uid/likes/:tid to record that a user likes a tuit
  *     </li>
- *     <li>DELETE /api/users/:uid/unlikes/:tid to record that a user
+ *     <li>DELETE /api/users/:uid/likes/:tid to record that a user
  *     no londer likes a tuit</li>
  * </ul>
  * @property {LikeDao} likeDao Singleton DAO implementing likes CRUD operations
@@ -37,7 +37,7 @@ export default class LikeController implements LikeControllerI {
             app.get("/api/users/:uid/likes", LikeController.likeController.findAllTuitsLikedByUser);
             app.get("/api/tuits/:tid/likes", LikeController.likeController.findAllUsersThatLikedTuit);
             app.post("/api/users/:uid/likes/:tid", LikeController.likeController.userLikesTuit);
-            app.delete("/api/users/:uid/unlikes/:tid", LikeController.likeController.userUnlikesTuit);
+            app.delete("/api/users/:uid/likes/:tid", LikeController.likeController.userUnlikesTuit);
         }
         return LikeController.likeController;
     }
