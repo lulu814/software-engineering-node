@@ -95,7 +95,7 @@ export default class BookmarkController implements BookmarkControllerI {
     /**
      * @param {Request} req Represents request from client, including the
      * path parameters uid and tid representing the user that is unbookmarking
-     * the tuit and the tuit being bookmarked
+     * the tuit and the tuits being bookmarked
      * @param {Response} res Represents response to client, including status
      * on whether deleting the bookmark was successful or not
      */

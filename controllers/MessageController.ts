@@ -58,7 +58,7 @@ export default class MessageController implements MessageControllerI {
      * body formatted as JSON arrays containing the message objects
      */
     findAllMessagesSentByUser = (req: Request, res: Response) =>
-        MessageController.messageDao.findAllMessagesSentByUser(req.params.tid)
+        MessageController.messageDao.findAllMessagesSentByUser(req.params.uid)
             .then(messages => res.json(messages));
 
     /**
@@ -82,7 +82,7 @@ export default class MessageController implements MessageControllerI {
      * database
      */
     userSendsMessage = (req: Request, res: Response) =>
-        MessageController.messageDao.userSendsMessage(req.params.uid, req.params.tid, req.body)
+        MessageController.messageDao.userSendsMessage(req.params.source_uid, req.params.target_uid, req.body)
             .then(messages => res.json(messages));
 
     /**
@@ -97,7 +97,7 @@ export default class MessageController implements MessageControllerI {
 
     /**
      * @param {Request} req Represents request from client, including the
-     * path parameters uid and tid representing the user that is remove all
+     * path parameters uid representing the user that is remove all
      * the messages sent by the user
      * @param {Response} res Represents response to client, including status
      * on whether deleting the messages was successful or not
@@ -108,8 +108,8 @@ export default class MessageController implements MessageControllerI {
 
     /**
      * @param {Request} req Represents request from client, including the
-     * path parameters uid and tid representing the user that is remove all
-     * the messages sent by the user
+     * path parameters uid representing the user that is remove all
+     * the messages received by the user
      * @param {Response} res Represents response to client, including status
      * on whether deleting the messages was successful or not
      */

@@ -1,5 +1,5 @@
 /**
- * @file Declares RESTful API for Messages resource
+ * @file Declares controller RESTful API for Messages resource
  */
 import {Request, Response} from "express";
 
