@@ -2,7 +2,7 @@
  * @file Controller RESTful Web service API for bookmarks resource
  */
 import {Express, Request, Response} from "express";
-import bookmarkedao from "../daos/BookmarkDao";
+import BookmarkDao from "../daos/BookmarkDao";
 import BookmarkControllerI from "../interfaces/BookmarkControllerI";
 
 /**
@@ -20,13 +20,13 @@ import BookmarkControllerI from "../interfaces/BookmarkControllerI";
  *    <li>DELETE /api/users/:uid/bookmarks to record that a user
  *     no londer bookmark any tuit</li>
  * </ul>
- * @property {bookmarkedao} bookmarkedao Singleton DAO implementing bookmarks CRUD operations
+ * @property {BookmarkDao} BookmarkDao Singleton DAO implementing bookmarks CRUD operations
  * @property {BookmarkController} BookmarkController Singleton controller implementing
  * RESTful Web service API
  */
 export default class BookmarkController implements BookmarkControllerI {
-    private static bookmarkedao: bookmarkedao = bookmarkedao.getInstance();
-    private static BookmarkController: BookmarkController | null = null;
+    private static bookmarkDao: BookmarkDao = BookmarkDao.getInstance();
+    private static bookmarkController: BookmarkController | null = null;
     /**
      * Creates singleton controller instance
      * @param {Express} app Express instance to declare the RESTful Web service
@@ -34,15 +34,15 @@ export default class BookmarkController implements BookmarkControllerI {
      * @return BookmarkController
      */
     public static getInstance = (app: Express): BookmarkController => {
-        if(BookmarkController.BookmarkController === null) {
-            BookmarkController.BookmarkController = new BookmarkController();
-            app.get("/api/users/:uid/bookmarks", BookmarkController.BookmarkController.findAllTuitsBookmarkedByUser);
-            app.get("/api/tuits/:tid/bookmarks", BookmarkController.BookmarkController.findAllUsersThatBookmarkedTuit);
-            app.post("/api/users/:uid/bookmarks/:tid", BookmarkController.BookmarkController.userBookmarksTuit);
-            app.delete("/api/users/:uid/bookmarks/:tid", BookmarkController.BookmarkController.userUnbookmarksTuit);
-            app.delete("/api/users/:uid/bookmarks", BookmarkController.BookmarkController.userUnbookmarksAllTuit);
+        if(BookmarkController.bookmarkController === null) {
+            BookmarkController.bookmarkController = new BookmarkController();
+            app.get("/api/users/:uid/bookmarks", BookmarkController.bookmarkController.findAllTuitsBookmarkedByUser);
+            app.get("/api/tuits/:tid/bookmarks", BookmarkController.bookmarkController.findAllUsersThatBookmarkedTuit);
+            app.post("/api/users/:uid/bookmarks/:tid", BookmarkController.bookmarkController.userBookmarksTuit);
+            app.delete("/api/users/:uid/bookmarks/:tid", BookmarkController.bookmarkController.userUnbookmarksTuit);
+            app.delete("/api/users/:uid/bookmarks", BookmarkController.bookmarkController.userUnbookmarksAllTuit);
         }
-        return BookmarkController.BookmarkController;
+        return BookmarkController.bookmarkController;
     }
 
     private constructor() {}
@@ -52,10 +52,10 @@ export default class BookmarkController implements BookmarkControllerI {
      * @param {Request} req Represents request from client, including the path
      * parameter tid representing the bookmarked tuit
      * @param {Response} res Represents response to client, including the
-     * body formatted as JSON arrays containing the user objects
+     * body formatted as JSON arrays containing the bookmark objects
      */
     findAllUsersThatBookmarkedTuit = (req: Request, res: Response) =>
-        BookmarkController.bookmarkedao.findAllUsersThatBookmarkedTuit(req.params.tid)
+        BookmarkController.bookmarkDao.findAllUsersThatBookmarkedTuit(req.params.tid)
             .then(users => res.json(users));
 
     /**
@@ -66,7 +66,7 @@ export default class BookmarkController implements BookmarkControllerI {
      * body formatted as JSON arrays containing the tuit objects that were bookmarked
      */
     findAllTuitsBookmarkedByUser = (req: Request, res: Response) =>
-        BookmarkController.bookmarkedao.findAllTuitsBookmarkedByUser(req.params.uid)
+        BookmarkController.bookmarkDao.findAllTuitsBookmarkedByUser(req.params.uid)
             .then(tuits => res.json(tuits));
 
     /**
@@ -78,7 +78,7 @@ export default class BookmarkController implements BookmarkControllerI {
      * database
      */
     userBookmarksTuit = (req: Request, res: Response) =>
-        BookmarkController.bookmarkedao.userBookmarksTuit(req.params.uid, req.params.tid)
+        BookmarkController.bookmarkDao.userBookmarksTuit(req.params.uid, req.params.tid)
             .then(bookmarks => res.json(bookmarks));
 
     /**
@@ -89,7 +89,7 @@ export default class BookmarkController implements BookmarkControllerI {
      * on whether deleting the bookmark was successful or not
      */
     userUnbookmarksTuit = (req: Request, res: Response) =>
-        BookmarkController.bookmarkedao.userUnbookmarksTuit(req.params.uid, req.params.tid)
+        BookmarkController.bookmarkDao.userUnbookmarksTuit(req.params.uid, req.params.tid)
             .then(status => res.send(status));
 
     /**
@@ -100,6 +100,6 @@ export default class BookmarkController implements BookmarkControllerI {
      * on whether deleting the bookmark was successful or not
      */
     userUnbookmarksAllTuit = (req: Request, res: Response) =>
-        BookmarkController.bookmarkedao.userUnbookmarksTuit(req.params.uid, req.params.tid)
+        BookmarkController.bookmarkDao.userUnbookmarksTuit(req.params.uid, req.params.tid)
             .then(status => res.send(status));
 };

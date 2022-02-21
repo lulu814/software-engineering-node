@@ -1,9 +1,8 @@
-import Bookmark from "../models/bookmarks/Bookmark";
-
 /**
  * @file Declares API for Bookmarks related data access object methods
  */
-export default interface BookmarkI {
+import Bookmark from "../models/bookmarks/Bookmark";
+export default interface BookmarkDaoI {
     findAllUsersThatBookmarkedTuit (tid: string): Promise<Bookmark[]>;
     findAllTuitsBookmarkedByUser (uid: string): Promise<Bookmark[]>;
     userBookmarksTuit (tid: string, uid: string): Promise<Bookmark>;
