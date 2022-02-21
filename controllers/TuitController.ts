@@ -52,7 +52,6 @@ export default class TuitController implements TuitControllerI {
             app.get("/api/users/:uid/tuits", TuitController.tuitController.findAllTuitsByUser);
             app.get("/api/tuits/:tid", TuitController.tuitController.findTuitById);
             app.post("/api/users/:uid/tuits", TuitController.tuitController.createTuitByUser);
-            // app.post("/api/tuits", TuitController.tuitController.createTuit);
             app.put("/api/tuits/:uid", TuitController.tuitController.updateTuit);
             app.delete("/api/tuits/:uid", TuitController.tuitController.deleteTuit);
         }
@@ -89,11 +88,8 @@ export default class TuitController implements TuitControllerI {
      * body formatted as JSON containing the tuit that matches the user ID
      */
     findTuitById = (req: Request, res: Response) =>
-        TuitController.tuitDao.findTuitById(req.params.uid)
+        TuitController.tuitDao.findTuitById(req.params.tid)
             .then((tuit: Tuit) => res.json(tuit));
-    // createTuit = (req: Request, res: Response) =>
-    //     TuitController.tuitDao.createTuit(req.body)
-    //         .then((tuit: Tuit) => res.json(tuit));
     /**
      * @param {Request} req Represents request from client, including body
      * containing the JSON object for the new tuit to be inserted in the
