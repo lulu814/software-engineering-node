@@ -16,8 +16,8 @@
 
 import express from 'express';
 import mongoose from 'mongoose';
-mongoose.connect('mongodb://localhost:27017/tuit-db');
-// mongoose.connect('mongodb+srv://lilaliu:CS5500lila@cluster0.i1c3p.mongodb.net/tuit-db?retryWrites=true&w=majority');
+// mongoose.connect('mongodb://localhost:27017/tuit-db');
+mongoose.connect('mongodb+srv://lilaliu:CS5500lila@cluster0.i1c3p.mongodb.net/tuit-db?retryWrites=true&w=majority');
 import bodyParser from "body-parser";
 import UserController from './controllers/UserController';
 import TuitController from "./controllers/TuitController";
