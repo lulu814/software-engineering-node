@@ -100,6 +100,6 @@ export default class BookmarkController implements BookmarkControllerI {
      * on whether deleting the bookmark was successful or not
      */
     userUnbookmarksAllTuit = (req: Request, res: Response) =>
-        BookmarkController.bookmarkDao.userUnbookmarksTuit(req.params.uid, req.params.tid)
+        BookmarkController.bookmarkDao.userUnbookmarksAllTuit(req.params.uid)
             .then(status => res.send(status));
 };
