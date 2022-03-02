@@ -24,7 +24,9 @@ export default class TuitDao implements TuitDaoI{
     findAllTuits = async (): Promise<Tuit[]> =>
         TuitModel.find();
     findAllTuitsByUser = async (uid: string): Promise<Tuit[]> =>
-        TuitModel.find({postedBy: uid});
+        TuitModel.find({postedBy: uid})
+            .populate("postedBy")
+            .exec();
     findTuitById = async (tid: string): Promise<any> =>
         TuitModel.findById(tid)
             .populate("postedBy")

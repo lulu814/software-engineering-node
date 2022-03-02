@@ -16,9 +16,6 @@
 
 import express from 'express';
 import mongoose from 'mongoose';
-// mongoose.connect('mongodb://localhost:27017/tuit-db');
-mongoose.connect('mongodb+srv://lilaliu:CS5500lila@cluster0.i1c3p.mongodb.net/tuit-db?retryWrites=true&w=majority');
-import bodyParser from "body-parser";
 import UserController from './controllers/UserController';
 import TuitController from "./controllers/TuitController";
 import LikeController from "./controllers/LikeController";
@@ -26,8 +23,15 @@ import FollowController from "./controllers/FollowController";
 import BookmarkController from "./controllers/BookmarkController";
 import MessageController from "./controllers/MessageController";
 
+var cors = require('cors')
+// connect to the database
+// mongoose.connect('mongodb://localhost:27017/tuit-db');
+mongoose.connect('mongodb+srv://lilaliu:CS5500lila@cluster0.i1c3p.mongodb.net/tuit-db?retryWrites=true&w=majority');
 const app = express();
-app.use(bodyParser.json())
+app.use(express.json());
+app.use(cors());
+
+// create RESTful Web service API
 
 const userController = UserController.getInstance(app);
 const tuitController = TuitController.getInstance(app);
@@ -36,5 +40,9 @@ const followController = FollowController.getInstance(app);
 const bookmarkController = BookmarkController.getInstance(app);
 const messageController = MessageController.getInstance(app);
 
+/**
+ * Start a server listening at port 4000 locally
+ * but use environment variable PORT on Heroku if available.
+ */
 const PORT = 4000;
 app.listen(process.env.PORT || PORT);

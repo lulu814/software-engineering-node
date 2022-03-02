@@ -48,6 +48,7 @@ export default class UserController implements UserControllerI {
             app.get("/api/users/create", UserController.userController.createUser);
             app.get("/api/users/:uid/delete", UserController.userController.deleteUser);
             app.get("/api/users/delete", UserController.userController.deleteAllUsers);
+            app.get("/api/users/username/:username/delete", UserController.userController.deleteUsersByUsername);
 
             // RESTful User Web service API
             app.get("/api/users", UserController.userController.findAllUsers);
@@ -56,6 +57,7 @@ export default class UserController implements UserControllerI {
             app.put("/api/users/:uid", UserController.userController.updateUser);
             app.delete("/api/users/:uid", UserController.userController.deleteUser);
             app.delete("/api/users", UserController.userController.deleteAllUsers);
+            app.post("/api/login",UserController.userController.login);
         }
         return UserController.userController;
     }
@@ -127,4 +129,40 @@ export default class UserController implements UserControllerI {
     deleteAllUsers = (req: Request, res: Response) =>
         UserController.userDao.deleteAllUsers()
             .then((status) => res.send(status));
+
+    /**
+     * Removes user instance with the given username from the database.
+     * @param {Request} req Represents request from client
+     * @param {Response} res Represents response to client, including status
+     * on whether deleting user was successful or not
+     */
+    deleteUsersByUsername = (req: Request, res: Response) =>
+        UserController.userDao.deleteUsersByUsername(req.params.username)
+            .then(status => res.send(status));
+
+    /**
+     * Checks if the user with the given username and password exists in the database.
+     * @param {Request} req Represents request from client
+     * @param {Response} res Represents response to client, including the
+     * body formatted as JSON containing the user information
+     */
+    login = (req: Request, res: Response) =>
+        UserController.userDao
+            .findUserByCredentials(req.body.username, req.body.password)
+            .then(user => {
+                res.json(user)
+            });
+
+    /**
+     * Register user with the given username and password if the same username does not exist.
+     * @param {Request} req Represents request from client
+     * @param {Response} res Represents response to client, including the
+     * body formatted as JSON containing the new user that was inserted in the
+     * database
+     */
+    register = (req: Request, res: Response) =>
+        UserController.userDao.findUserByUsername(req.body.username)
+            .then(user => {
+                res.json(user)
+            });
 };
