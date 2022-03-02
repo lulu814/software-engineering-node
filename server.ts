@@ -29,6 +29,7 @@ import MessageController from "./controllers/MessageController";
 const app = express();
 app.use(bodyParser.json())
 
+// create RESTful Web service API
 const userController = UserController.getInstance(app);
 const tuitController = TuitController.getInstance(app);
 const likeController = LikeController.getInstance(app);
@@ -36,5 +37,9 @@ const followController = FollowController.getInstance(app);
 const bookmarkController = BookmarkController.getInstance(app);
 const messageController = MessageController.getInstance(app);
 
+/**
+ * Start a server listening at port 4000 locally
+ * but use environment variable PORT on Heroku if available.
+ */
 const PORT = 4000;
 app.listen(process.env.PORT || PORT);
