@@ -24,9 +24,12 @@ import BookmarkController from "./controllers/BookmarkController";
 import MessageController from "./controllers/MessageController";
 
 var cors = require('cors')
+const dotenv = require("dotenv")
+dotenv.config()
+
 // connect to the database
 // mongoose.connect('mongodb://localhost:27017/tuit-db');
-mongoose.connect('mongodb+srv://lilaliu:CS5500lila@cluster0.i1c3p.mongodb.net/tuit-db?retryWrites=true&w=majority');
+mongoose.connect('mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@cluster0.i1c3p.mongodb.net/tuit-db?retryWrites=true&w=majority');
 const app = express();
 app.use(express.json());
 app.use(cors());
