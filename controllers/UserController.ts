@@ -58,6 +58,7 @@ export default class UserController implements UserControllerI {
             app.delete("/api/users/:uid", UserController.userController.deleteUser);
             app.delete("/api/users", UserController.userController.deleteAllUsers);
             app.post("/api/login",UserController.userController.login);
+            app.post("/api/register",UserController.userController.register);
         }
         return UserController.userController;
     }
