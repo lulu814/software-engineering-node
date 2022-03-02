@@ -25,8 +25,6 @@ import FollowController from "./controllers/FollowController";
 import BookmarkController from "./controllers/BookmarkController";
 import MessageController from "./controllers/MessageController";
 
-var cors = require('cors')
-
 // build the connection string
 const PROTOCOL = "mongodb+srv";
 const DB_USERNAME = process.env.DB_USERNAME;
@@ -42,7 +40,6 @@ mongoose.connect(connectionString);
 // mongoose.connect('mongodb://localhost:27017/tuit-db');
 const app = express();
 app.use(express.json());
-app.use(cors());
 
 // create RESTful Web service API
 
