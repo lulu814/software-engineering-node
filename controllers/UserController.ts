@@ -41,7 +41,7 @@ export default class UserController implements UserControllerI {
      * @returns UserController
      */
     public static getInstance = (app: Express): UserController => {
-        if(UserController.userController === null) {
+        if (UserController.userController === null) {
             UserController.userController = new UserController();
 
             // for testing without postman. Not RESTful
@@ -57,13 +57,14 @@ export default class UserController implements UserControllerI {
             app.put("/api/users/:uid", UserController.userController.updateUser);
             app.delete("/api/users/:uid", UserController.userController.deleteUser);
             app.delete("/api/users", UserController.userController.deleteAllUsers);
-            app.post("/api/login",UserController.userController.login);
-            app.post("/api/register",UserController.userController.register);
+            app.post("/api/login", UserController.userController.login);
+            app.post("/api/register", UserController.userController.register);
         }
         return UserController.userController;
     }
 
-    private constructor() {}
+    private constructor() {
+    }
 
     /**
      * Retrieves all users from the database and returns an array of users.
@@ -150,9 +151,7 @@ export default class UserController implements UserControllerI {
     login = (req: Request, res: Response) =>
         UserController.userDao
             .findUserByCredentials(req.body.username, req.body.password)
-            .then(user => {
-                res.json(user)
-            });
+            .then(user => res.json(user));
 
     /**
      * Register user with the given username and password if the same username does not exist.
@@ -163,7 +162,5 @@ export default class UserController implements UserControllerI {
      */
     register = (req: Request, res: Response) =>
         UserController.userDao.findUserByUsername(req.body.username)
-            .then(user => {
-                res.json(user)
-            });
+            .then(user => res.json(user));
 };
