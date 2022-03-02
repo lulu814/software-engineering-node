@@ -13,7 +13,9 @@
  * Connects to a remote MongoDB instance hosted on the Atlas cloud database
  * service
  */
-
+require('dotenv').config({
+    path:"./.env"
+});
 import express from 'express';
 import mongoose from 'mongoose';
 import UserController from './controllers/UserController';
@@ -24,12 +26,20 @@ import BookmarkController from "./controllers/BookmarkController";
 import MessageController from "./controllers/MessageController";
 
 var cors = require('cors')
-const dotenv = require("dotenv")
-dotenv.config()
+
+// build the connection string
+const PROTOCOL = "mongodb+srv";
+const DB_USERNAME = process.env.DB_USERNAME;
+const DB_PASSWORD = process.env.DB_PASSWORD;
+const HOST = "cluster0.i1c3p.mongodb.net";
+const DB_NAME = "tuit-db";
+const DB_QUERY = "retryWrites=true&w=majority";
+const connectionString = `${PROTOCOL}://${DB_USERNAME}:${DB_PASSWORD}@${HOST}/${DB_NAME}?${DB_QUERY}`;
+// connect to the database
+mongoose.connect(connectionString);
 
 // connect to the database
 // mongoose.connect('mongodb://localhost:27017/tuit-db');
-mongoose.connect('mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@cluster0.i1c3p.mongodb.net/tuit-db?retryWrites=true&w=majority');
 const app = express();
 app.use(express.json());
 app.use(cors());
@@ -48,4 +58,5 @@ const messageController = MessageController.getInstance(app);
  * but use environment variable PORT on Heroku if available.
  */
 const PORT = 4000;
+console.log("ENV are", process.env.DB_PASSWORD);
 app.listen(process.env.PORT || PORT);
