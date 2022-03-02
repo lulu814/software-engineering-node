@@ -27,7 +27,9 @@ export default class TuitDao implements TuitDaoI{
      * database
      */
     findAllTuits = async (): Promise<Tuit[]> =>
-        TuitModel.find();
+        TuitModel.find()
+            .populate("postedBy")
+            .exec();
     /**
      * Uses TuitModel to retrieve single tuit document from tuits collection using the uid
      * @param {string} uid User's primary key
