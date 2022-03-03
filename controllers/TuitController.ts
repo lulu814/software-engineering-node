@@ -48,12 +48,17 @@ export default class TuitController implements TuitControllerI {
     public static getInstance = (app: Express): TuitController => {
         if(TuitController.tuitController === null) {
             TuitController.tuitController = new TuitController();
+
+            // for testing without postman. Not RESTful
+            app.get("/api/tuits/:uid/delete", TuitController.tuitController.deleteTuitByUserId);
+
+            // RESTful User Web service API
             app.get("/api/tuits", TuitController.tuitController.findAllTuits);
             app.get("/api/users/:uid/tuits", TuitController.tuitController.findAllTuitsByUser);
             app.get("/api/tuits/:tid", TuitController.tuitController.findTuitById);
             app.post("/api/users/:uid/tuits", TuitController.tuitController.createTuitByUser);
-            app.put("/api/tuits/:uid", TuitController.tuitController.updateTuit);
-            app.delete("/api/tuits/:uid", TuitController.tuitController.deleteTuit);
+            app.put("/api/tuits/:tid", TuitController.tuitController.updateTuit);
+            app.delete("/api/tuits/:tid", TuitController.tuitController.deleteTuit);
         }
         return TuitController.tuitController;
     }
@@ -109,7 +114,7 @@ export default class TuitController implements TuitControllerI {
      * on whether updating a tuit was successful or not
      */
     updateTuit = (req: Request, res: Response) =>
-        TuitController.tuitDao.updateTuit(req.params.uid, req.body)
+        TuitController.tuitDao.updateTuit(req.params.tid, req.body)
             .then((status) => res.send(status));
 
     /**
@@ -119,6 +124,16 @@ export default class TuitController implements TuitControllerI {
      * on whether deleting a user was successful or not
      */
     deleteTuit = (req: Request, res: Response) =>
-        TuitController.tuitDao.deleteTuit(req.params.uid)
+        TuitController.tuitDao.deleteTuit(req.params.tid)
+            .then((status) => res.send(status));
+
+    /**
+     * @param {Request} req Represents request from client, including path
+     * parameter uid identifying the primary key of the dummy user's tuit to be removed
+     * @param {Response} res Represents response to client, including status
+     * on whether deleting a tuit was successful or not
+     */
+    deleteTuitByUserId = (req: Request, res: Response) =>
+        TuitController.tuitDao.deleteTuitByUserId(req.params.uid)
             .then((status) => res.send(status));
 }
