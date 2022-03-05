@@ -9,11 +9,25 @@ import Tuit from "../../models/tuits/Tuit";
  * @property {string} tuit The content of the tuit
  * @property {ObjectId} postedBy The user that posted the tuit
  * @property {date} postedOn The date the tuit is posted
+ * @property {string} image The image link in the tuit
+ * @property {string} youtube The youtube link in the tuit
+ * @property {string} imageOverlay The imageOverlay in the tuit
+ * @property {object} stats The stats object in the tuit including count of
+ * reply, retuit, and like
  */
 const TuitSchema = new mongoose.Schema<Tuit>({
     tuit: {type: String, required: true},
     postedBy: {type: Schema.Types.ObjectId, ref: "UserModel"},
-    postedOn: {type: Date, default: Date.now}
+    postedOn: {type: Date, default: Date.now},
+    image: String,
+    youtube: String,
+    avatarLogo: String,
+    imageOverlay: String,
+    stats: {
+        replies: Number,
+        retuits: Number,
+        likes: Number
+    }
 }, {collection: "tuits"});
 export default TuitSchema;
 
