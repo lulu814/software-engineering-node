@@ -35,7 +35,7 @@ export default class LikeController implements LikeControllerI {
      * @return LikeController
      */
     public static getInstance = (app: Express): LikeController => {
-        if(LikeController.likeController === null) {
+        if (LikeController.likeController === null) {
             LikeController.likeController = new LikeController();
             app.get("/api/users/:uid/likes", LikeController.likeController.findAllTuitsLikedByUser);
             app.get("/api/tuits/:tid/likes", LikeController.likeController.findAllUsersThatLikedTuit);
@@ -44,7 +44,8 @@ export default class LikeController implements LikeControllerI {
         return LikeController.likeController;
     }
 
-    private constructor() {}
+    private constructor() {
+    }
 
     /**
      * Retrieves all users that liked a tuit from the database
@@ -106,7 +107,8 @@ export default class LikeController implements LikeControllerI {
             } else {
                 await LikeController.likeDao.userLikesTuit(userId, tid);
                 tuit.stats.likes = howManyLikedTuit + 1;
-            };
+            }
+            ;
             await tuitDao.updateLikes(tid, tuit.stats);
             res.sendStatus(200);
         } catch (e) {
