@@ -107,16 +107,6 @@ export default class TuitController implements TuitControllerI {
 
     /**
      * @param {Request} req Represents request from client, including path
-     * parameter tid identifying the primary key of the tuit to be modified
-     * @param {Response} res Represents response to client, including status
-     * on whether updating a tuit was successful or not
-     */
-    updateTuit = (req: Request, res: Response) =>
-        TuitController.tuitDao.updateTuit(req.params.tid, req.body)
-            .then((status) => res.send(status));
-
-    /**
-     * @param {Request} req Represents request from client, including path
      * parameter tid identifying the primary key of the tuit to be removed
      * @param {Response} res Represents response to client, including status
      * on whether deleting a user was successful or not
@@ -133,5 +123,15 @@ export default class TuitController implements TuitControllerI {
      */
     deleteTuitByUserId = (req: Request, res: Response) =>
         TuitController.tuitDao.deleteTuitByUserId(req.params.uid)
+            .then((status) => res.send(status));
+
+    /**
+     * @param {Request} req Represents request from client, including path
+     * parameter tid identifying the primary key of the tuit to be modified
+     * @param {Response} res Represents response to client, including status
+     * on whether updating a tuit was successful or not
+     */
+    updateTuit = (req: Request, res: Response) =>
+        TuitController.tuitDao.updateTuit(req.params.tid, req.body)
             .then((status) => res.send(status));
 }
