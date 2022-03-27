@@ -31,6 +31,11 @@ import GroupController from "./controllers/GroupController";
 
 var cors = require('cors')
 const session = require("express-session");
+const app = express();
+app.use(cors({
+    credentials: true,
+    origin: ["http://localhost:3000", 'https://relaxed-liskov-3858d1.netlify.app']
+}));
 
 // build the connection string
 const PROTOCOL = "mongodb+srv";
@@ -45,11 +50,7 @@ mongoose.connect(connectionString);
 
 // connect to the database
 // mongoose.connect('mongodb://localhost:27017/tuit-db');
-const app = express();
-app.use(cors({
-    credentials: true,
-    origin: 'https://6240b66d18bfda2649cfe7a6--relaxed-liskov-3858d1.netlify.app'
-}));
+
 
 const SECRET = 'process.env.SECRET';
 let sess = {
