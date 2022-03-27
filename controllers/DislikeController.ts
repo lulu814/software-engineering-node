@@ -14,10 +14,10 @@ import TuitDao from "../daos/TuitDao";
  *     </li>
  *     <li>GET /api/tuits/:tid/dislikes to retrieve all users that disliked a tuit
  *     </li>
- *     <li>POST /api/users/:uid/dislikes/:tid to record that a user dislikes a tuit
+ *     <li>GET /api/users/:uid/dislikes/:tid to record if a user dislikes a tuit
  *     </li>
- *     <li>DELETE /api/users/:uid/dislikes/:tid to record that a user
- *     no londer dislikes a tuit</li>
+ *     <li>PUT /api/users/:uid/dislikes/:tid to toggle a user dislikes a tuit
+ *     </li>
  * </ul>
  * @property {DislikeDao} dislikeDao Singleton DAO implementing dislikes CRUD operations
  * @property {TuitDao} tuitDao Singleton DAO implementing tuits CRUD operations
@@ -37,6 +37,8 @@ export default class DislikeController implements DislikeControllerI {
     public static getInstance = (app: Express): DislikeController => {
         if (DislikeController.dislikeController === null) {
             DislikeController.dislikeController = new DislikeController();
+            app.get("/api/tuits/:tid/dislikes", DislikeController.dislikeController.findAllUsersThatDislikedTuit);
+            app.get("/api/users/:uid/dislikes", DislikeController.dislikeController.findAllTuitsDislikedByUser);
             app.get("/api/users/:uid/dislikes/:tid", DislikeController.dislikeController.findUserDislikedTuit);
             app.put("/api/users/:uid/dislikes/:tid", DislikeController.dislikeController.userTogglesTuitDislikes);
         }
@@ -44,6 +46,44 @@ export default class DislikeController implements DislikeControllerI {
     }
 
     private constructor() {
+    }
+
+    /**
+     * Retrieves all users that disliked a tuit from the database
+     * @param {Request} req Represents request from client, including the path
+     * parameter tid representing the disliked tuit
+     * @param {Response} res Represents response to client, including the
+     * body formatted as JSON arrays containing the user objects
+     */
+    findAllUsersThatDislikedTuit = (req: Request, res: Response) => {
+        console.log("findAllTuitsDislikedByUser")
+        DislikeController.dislikeDao.findAllUsersThatDislikedTuit(req.params.tid)
+            .then(dislikes => res.json(dislikes));
+    }
+
+
+    /**
+     * Retrieves all tuits disliked by a user from the database
+     * @param {Request} req Represents request from client, including the path
+     * parameter uid representing the user disliked the tuits
+     * @param {Response} res Represents response to client, including the
+     * body formatted as JSON arrays containing the tuit objects that were disliked
+     */
+    findAllTuitsDislikedByUser = (req: Request, res: Response) => {
+        const uid = req.params.uid;
+        // @ts-ignore
+        const profile = req.session['profile'];
+        const userId = uid === 'me' && profile ?
+            profile._id : uid;
+
+        DislikeController.dislikeDao.findAllTuitsDislikedByUser(userId)
+            .then(dislikes => {
+                // filter out dislikes with null tuits. Only keep defined tuits
+                // extract tuit object from dislikes respond with tuits
+                const dislikesNonNullTuits = dislikes.filter(dislike => dislike.tuit);
+                const tuitsFromDislikes = dislikesNonNullTuits.map(dislike => dislike.tuit);
+                res.json(tuitsFromDislikes);
+            });
     }
 
     /**
@@ -93,7 +133,6 @@ export default class DislikeController implements DislikeControllerI {
                 await DislikeController.dislikeDao.userDislikesTuit(userId, tid);
                 tuit.stats.dislikes = howManyLikedTuit + 1;
             }
-            ;
             await tuitDao.updateLikes(tid, tuit.stats);
             res.sendStatus(200);
         } catch (e) {

@@ -21,6 +21,33 @@ export default class DislikeDao implements DislikeDaoI {
         return DislikeDao.dislikeDao;
     }
     private constructor() {}
+
+    /**
+     * Uses DislikeModel to retrieve all users in dislike documents from dislikes collection disliked a tuit
+     * @param {string} tid Tuit's primary key
+     * @returns Promise To be notified when the dislikes are retrieved from database
+     */
+    findAllUsersThatDislikedTuit = async (tid: string): Promise<Dislike[]> =>
+        DislikeModel
+            .find({tuit: tid})
+            .populate("dislikedBy")
+            .exec();
+    /**
+     * Uses DislikeModel to retrieve all tuits in dislike documents from dislikes collection disliked by a user
+     * @param {string} uid User's primary key
+     * @returns Promise To be notified when the dislikes are retrieved from database
+     */
+    findAllTuitsDislikedByUser = async (uid: string): Promise<Dislike[]> =>
+        DislikeModel
+            .find({dislikedBy: uid})
+            .populate({
+                path: "tuit",         // replace tuit reference with actual document
+                populate: {
+                    path: "postedBy" // replace tuit's postedBy reference with actual user document
+                }
+            })
+            .exec();
+
     /**
      * Inserts dislike instance into the database
      * @param {string} uid User's primary key
