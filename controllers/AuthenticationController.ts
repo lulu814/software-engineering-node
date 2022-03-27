@@ -11,7 +11,6 @@ const AuthenticationController = (app: Express) => {
         const user = req.body;
         const username = user.username;
         const password = user.password;
-        console.log(password)
         const existingUser = await userDao
             .findUserByUsername(username);
         const match = await bcrypt.compare(password, existingUser.password);
@@ -49,6 +48,8 @@ const AuthenticationController = (app: Express) => {
 
     const profile = (req: Request, res: Response) => {
         // @ts-ignore
+        // The user interface will use the existence of the profile or the error status to
+        // conclude whether someone's logged in or not.
         const profile = req.session['profile'];
         if (profile) {
             res.json(profile);

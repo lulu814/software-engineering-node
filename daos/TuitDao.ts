@@ -76,7 +76,7 @@ export default class TuitDao implements TuitDaoI{
         TuitModel.deleteOne({_id: tid});
 
     /**
-     * Updates likes in database
+     * Updates tuit's stats in database
      * @param {string} tid Primary key of tuit to be modified
      * @param {any} newStats object of ne stats
      * @returns Promise To be notified when tuit is updated in the database
