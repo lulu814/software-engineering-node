@@ -75,6 +75,8 @@ export default class LikeController implements LikeControllerI {
 
         LikeController.likeDao.findAllTuitsLikedByUser(userId)
             .then(likes => {
+                // filter out likes with null tuits. Only keep defined tuits
+                // extract tuit object from likes respond with tuits
                 const likesNonNullTuits = likes.filter(like => like.tuit);
                 const tuitsFromLikes = likesNonNullTuits.map(like => like.tuit);
                 res.json(tuitsFromLikes);
