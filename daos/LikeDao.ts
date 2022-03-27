@@ -64,7 +64,7 @@ export default class LikeDao implements LikeDaoI {
         LikeModel.deleteOne({tuit: tid, likedBy: uid});
 
     /**
-     * Find user that likes this tuit
+     * Check if the user has already liked the tuit
      * @param {string} uid User's primary key
      * @param {string} tid Tuit's primary key
      * @returns Promise To be notified when like is removed from the database

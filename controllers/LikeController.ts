@@ -39,6 +39,7 @@ export default class LikeController implements LikeControllerI {
             LikeController.likeController = new LikeController();
             app.get("/api/users/:uid/likes", LikeController.likeController.findAllTuitsLikedByUser);
             app.get("/api/tuits/:tid/likes", LikeController.likeController.findAllUsersThatLikedTuit);
+            app.get("/api/users/:uid/likes/:tid", LikeController.likeController.findUserLikedTuit);
             app.put("/api/users/:uid/likes/:tid", LikeController.likeController.userTogglesTuitLikes);
         }
         return LikeController.likeController;
@@ -81,6 +82,25 @@ export default class LikeController implements LikeControllerI {
     }
 
     /**
+     * Check if the user has already liked the tuit
+     * @param {Request} req Represents request from client, including the path
+     * parameter uid representing the user, and the tid representing the tuit
+     * @param {Response} res Represents response to client, including the
+     * body formatted as JSON object containing the like objects or null
+     */
+    findUserLikedTuit = async (req: Request, res: Response) => {
+        const uid = req.params.uid;
+        const tid = req.params.tid;
+        // @ts-ignore
+        const profile = req.session['profile'];
+        const userId = uid === 'me' && profile ?
+            profile._id : uid;
+        LikeController.likeDao.findUserLikesTuit(userId, tid)
+            .then(like => res.json(like));
+    }
+
+
+    /**
      * @param {Request} req Represents request from client, including the
      * path parameters uid and tid representing the user that is liking the tuit
      * and the tuit being liked
@@ -115,4 +135,5 @@ export default class LikeController implements LikeControllerI {
             res.sendStatus(404);
         }
     }
-};
+}
+;
