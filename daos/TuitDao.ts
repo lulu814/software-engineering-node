@@ -36,7 +36,10 @@ export default class TuitDao implements TuitDaoI{
      * @returns Promise To be notified when tuit is retrieved from the database
      */
     findAllTuitsByUser = async (uid: string): Promise<Tuit[]> =>
-        TuitModel.find({postedBy: uid});
+        TuitModel.find({postedBy: uid})
+            .sort({'postedOn': -1})
+            .populate("postedBy")
+            .exec();
     /**
      * Uses TuitModel to retrieve single tuit document from tuits collection
      * @param {string} tid User's primary key
@@ -72,6 +75,17 @@ export default class TuitDao implements TuitDaoI{
     deleteTuit = async (tid: string): Promise<any> =>
         TuitModel.deleteOne({_id: tid});
 
+    /**
+     * Updates likes in database
+     * @param {string} tid Primary key of tuit to be modified
+     * @param {any} newStats object of ne stats
+     * @returns Promise To be notified when tuit is updated in the database
+     */
+    updateLikes = async (tid: string, newStats: any): Promise<any> =>
+        TuitModel.updateOne(
+            {_id: tid},
+            {$set: {stats: newStats}}
+        );
 
     /**
      * Removes tuit from the database. Used for testing

@@ -23,19 +23,6 @@ import TuitControllerI from "../interfaces/TuitControllerI";
  * RESTful Web service API
  */
 export default class TuitController implements TuitControllerI {
-    // app: Express;
-    // tuitDao: TuitDao;
-    //
-    // constructor(app: Express, tuitDao: TuitDao) {
-    //     this.app = app;
-    //     this.tuitDao = tuitDao;
-    //     this.app.get('/tuits', this.findAllTuits);
-    //     this.app.get('/tuits/:tid', this.findTuitById);
-    //     this.app.get('/users/:uid/tuits', this.findTuitsByUser);
-    //     this.app.post('/tuits', this.createTuit);
-    //     this.app.delete('/tuits/:tid', this.deleteTuit);
-    //     this.app.put('/tuits/:tid', this.updateTuit);
-    // }
     private static tuitDao: TuitDao = TuitDao.getInstance();
     private static tuitController: TuitController | null = null;
 
@@ -82,9 +69,14 @@ export default class TuitController implements TuitControllerI {
      * @param {Response} res Represents response to client, including the
      * body formatted as JSON arrays containing the tuit objects
      */
-    findAllTuitsByUser = (req: Request, res: Response) =>
-        TuitController.tuitDao.findAllTuitsByUser(req.params.uid)
+    findAllTuitsByUser = (req: Request, res: Response) => {
+        // @ts-ignore
+        let userId = req.params.uid === "my" && req.session['profile'] ?
+            // @ts-ignore
+            req.session['profile']._id : req.params.uid;
+        TuitController.tuitDao.findAllTuitsByUser(userId)
             .then((tuits: Tuit[]) => res.json(tuits));
+    }
 
     /**
      * @param {Request} req Represents request from client, including path
@@ -103,9 +95,15 @@ export default class TuitController implements TuitControllerI {
      * body formatted as JSON containing the new tuit that was inserted in the
      * database
      */
-    createTuitByUser = (req: Request, res: Response) =>
-        TuitController.tuitDao.createTuitByUser(req.params.uid, req.body)
+    createTuitByUser = (req: Request, res: Response) => {
+        // @ts-ignore
+        let userId = req.params.uid === "my" && req.session['profile'] ?
+            // @ts-ignore
+            req.session['profile']._id : req.params.uid;
+        console.log(userId);
+        TuitController.tuitDao.createTuitByUser(userId, req.body)
             .then((tuit: Tuit) => res.json(tuit));
+    }
 
     /**
      * @param {Request} req Represents request from client, including path

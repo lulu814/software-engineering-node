@@ -21,17 +21,6 @@ import UserControllerI from "../interfaces/UserControllerI";
  * RESTful Web service API
  */
 export default class UserController implements UserControllerI {
-    // app: Express;
-    // userDao: UserDao;
-    // constructor(app: Express, userDao: UserDao) {
-    //     this.app = app;
-    //     this.userDao = userDao;
-    //     this.app.get('/users', this.findAllUsers);
-    //     this.app.get('/users/:userid', this.findUserById);
-    //     this.app.post('/users', this.createUser);
-    //     this.app.delete('/users/:userid', this.deleteUser);
-    //     this.app.put('/users/:userid', this.updateUser);
-    // }
     private static userDao: UserDao = UserDao.getInstance();
     private static userController: UserController | null = null;
     /**
@@ -57,8 +46,6 @@ export default class UserController implements UserControllerI {
             app.put("/api/users/:uid", UserController.userController.updateUser);
             app.delete("/api/users/:uid", UserController.userController.deleteUser);
             app.delete("/api/users", UserController.userController.deleteAllUsers);
-            app.post("/api/login", UserController.userController.login);
-            app.post("/api/register", UserController.userController.register);
         }
         return UserController.userController;
     }
@@ -142,25 +129,25 @@ export default class UserController implements UserControllerI {
         UserController.userDao.deleteUsersByUsername(req.params.username)
             .then(status => res.send(status));
 
-    /**
-     * Checks if the user with the given username and password exists in the database.
-     * @param {Request} req Represents request from client
-     * @param {Response} res Represents response to client, including the
-     * body formatted as JSON containing the user information
-     */
-    login = (req: Request, res: Response) =>
-        UserController.userDao
-            .findUserByCredentials(req.body.username, req.body.password)
-            .then(user => res.json(user));
-
-    /**
-     * Register user with the given username and password if the same username does not exist.
-     * @param {Request} req Represents request from client
-     * @param {Response} res Represents response to client, including the
-     * body formatted as JSON containing the new user that was inserted in the
-     * database
-     */
-    register = (req: Request, res: Response) =>
-        UserController.userDao.findUserByUsername(req.body.username)
-            .then(user => res.json(user));
+    // /**
+    //  * Checks if the user with the given username and password exists in the database.
+    //  * @param {Request} req Represents request from client
+    //  * @param {Response} res Represents response to client, including the
+    //  * body formatted as JSON containing the user information
+    //  */
+    // login = (req: Request, res: Response) =>
+    //     UserController.userDao
+    //         .findUserByCredentials(req.body.username, req.body.password)
+    //         .then(user => res.json(user));
+    //
+    // /**
+    //  * Register user with the given username and password if the same username does not exist.
+    //  * @param {Request} req Represents request from client
+    //  * @param {Response} res Represents response to client, including the
+    //  * body formatted as JSON containing the new user that was inserted in the
+    //  * database
+    //  */
+    // register = (req: Request, res: Response) =>
+    //     UserController.userDao.findUserByUsername(req.body.username)
+    //         .then(user => res.json(user));
 };

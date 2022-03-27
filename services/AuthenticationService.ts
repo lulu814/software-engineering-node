@@ -5,6 +5,11 @@
  *     <li>register</li>
  * </ul>
  */
+import axios from "axios";
+const BASE_URL = process.env.REACT_APP_BASE_URL
+const AUTH_API = `${BASE_URL}/api/auth`
+
+
 import UserDao from "../daos/UserDao"
 
 const userDao: UserDao = UserDao.getInstance();
@@ -31,6 +36,7 @@ export const login = (u: string, p: string) =>
  * Register user with the given username and password if the same username does not exist
  * @param {string} u Represents username
  * @param {Response} p Represents password
+ * @param {string} e Represents email
  */
 export const register = (u: string, p: string, e: string) =>
     userDao.findUserByUsername(u)
