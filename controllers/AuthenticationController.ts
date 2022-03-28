@@ -52,6 +52,9 @@ const AuthenticationController = (app: Express) => {
         // conclude whether someone's logged in or not.
         const profile = req.session['profile'];
         if (profile) {
+            // safety issue to remove the password/id information before returning to client
+            profile.password = '';
+            profile._id = '';
             res.json(profile);
         } else {
             res.sendStatus(403);
