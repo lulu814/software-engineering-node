@@ -54,7 +54,6 @@ const AuthenticationController = (app: Express) => {
         if (profile) {
             // safety issue to remove the password/id information before returning to client
             profile.password = '';
-            profile._id = '';
             res.json(profile);
         } else {
             res.sendStatus(403);

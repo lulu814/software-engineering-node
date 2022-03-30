@@ -34,7 +34,7 @@ const session = require("express-session");
 const app = express();
 app.use(cors({
     credentials: true,
-    origin: ["http://localhost:3000", 'https://relaxed-liskov-3858d1.netlify.app']
+    origin: process.env.CORS_ORIGIN
 }));
 
 // build the connection string
@@ -51,20 +51,18 @@ mongoose.connect(connectionString);
 // connect to the database
 // mongoose.connect('mongodb://localhost:27017/tuit-db');
 
-
-const SECRET = 'process.env.SECRET';
 let sess = {
-    secret: SECRET,
+    secret: process.env.EXPRESS_SESSION_SECRET,
     saveUninitialized: true,
     resave: true,
     cookie: {
-        secure: false
+        sameSite: process.env.NODE_ENV === "production" ? 'none' : 'lax',
+        secure: process.env.NODE_ENV === "production",
     }
 }
 
-if (process.env.ENVIRONMENT === 'PRODUCTION') {
+if (process.env.NODE_ENV === 'production') {
     app.set('trust proxy', 1) // trust first proxy
-    sess.cookie.secure = true // serve secure cookies
 }
 
 app.use(session(sess))
