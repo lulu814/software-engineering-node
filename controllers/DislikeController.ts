@@ -75,7 +75,10 @@ export default class DislikeController implements DislikeControllerI {
         const profile = req.session['profile'];
         const userId = uid === 'me' && profile ?
             profile._id : uid;
-
+        if (userId === "me") {
+            res.sendStatus(503);
+            return;
+        }
         DislikeController.dislikeDao.findAllTuitsDislikedByUser(userId)
             .then(dislikes => {
                 // filter out dislikes with null tuits. Only keep defined tuits
@@ -100,6 +103,10 @@ export default class DislikeController implements DislikeControllerI {
         const profile = req.session['profile'];
         const userId = uid === 'me' && profile ?
             profile._id : uid;
+        if (userId === "me") {
+            res.sendStatus(503);
+            return;
+        }
         DislikeController.dislikeDao.findUserDislikesTuit(userId, tid)
             .then(dislike => res.json(dislike));
     }
@@ -122,6 +129,10 @@ export default class DislikeController implements DislikeControllerI {
         const profile = req.session['profile'];
         const userId = uid === 'me' && profile ?
             profile._id : uid;
+        if (userId === "me") {
+            res.sendStatus(503);
+            return;
+        }
         try {
             const userAlreadyLikedTuit = await dislikeDao.findUserDislikesTuit(userId, tid);
             const howManyLikedTuit = await dislikeDao.countHowManyDisikedTuit(tid);
